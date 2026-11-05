@@ -2,14 +2,14 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Golos+Text:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;500;600;700&family=Golos+Text:wght@400;500;600;700&display=swap">
 <style>
 /* Layout: one narrow reading column; sticky header with section switch + progress; each dhikr is a tappable card with its own counter ring. */
 :root {
   --bg: #DFE6E2;
   --surface: #F2F5F3;
   --ink: #16201C;
-  --muted: #56635E;
+  --muted: #3D4A45;
   --line: #C8D2CD;
   --m: #A8640F;   /* утро: рассвет */
   --e: #3D4C9E;   /* вечер: сумерки */
@@ -19,31 +19,31 @@
   --accent: var(--m);
   --accent-soft: color-mix(in srgb, var(--accent) 12%, var(--surface));
   --done-bg: #D5DDD9;
-  --f-ar: "Amiri", "Scheherazade New", "Traditional Arabic", "Noto Naskh Arabic", serif;
+  --f-ar: "Scheherazade New", "Noto Naskh Arabic", "Traditional Arabic", serif;
   --f-ui: "Golos Text", "Segoe UI", system-ui, -apple-system, sans-serif;
   --ar-size: 1.75rem;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0E1412; --surface: #161E1B; --ink: #E5ECE8; --muted: #93A29C; --line: #26312D;
+    --bg: #0E1412; --surface: #161E1B; --ink: #E5ECE8; --muted: #BAC7C1; --line: #26312D;
     --m: #E3A54A; --e: #8C9BF0; --p: #4FC197; --d: #E58FB0; --j: #5CC4D4; --done-bg: #131A17; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #0E1412; --surface: #161E1B; --ink: #E5ECE8; --muted: #93A29C; --line: #26312D;
+  --bg: #0E1412; --surface: #161E1B; --ink: #E5ECE8; --muted: #BAC7C1; --line: #26312D;
   --m: #E3A54A; --e: #8C9BF0; --p: #4FC197; --d: #E58FB0; --j: #5CC4D4; --done-bg: #131A17; color-scheme: dark;
 }
 /* Выбранный цвет страниц: действует при любой системной теме. */
 :root[data-skin="sand"] {
-  --bg: #E4D9C3; --surface: #F1E9D9; --ink: #2A2317; --muted: #6B5E4C; --line: #D1C3A9; --done-bg: #DBCFB7;
+  --bg: #E4D9C3; --surface: #F1E9D9; --ink: #2A2317; --muted: #4F4432; --line: #D1C3A9; --done-bg: #DBCFB7;
   --m: #965609; --e: #3B4787; --p: #2C6646; --d: #8A3553; --j: #1B6470; color-scheme: light;
 }
 :root[data-skin="olive"] {
-  --bg: #C9D2BA; --surface: #E1E6D4; --ink: #1D2317; --muted: #515B45; --line: #B2BCA1; --done-bg: #C0C9AF;
+  --bg: #C9D2BA; --surface: #E1E6D4; --ink: #1D2317; --muted: #3A4330; --line: #B2BCA1; --done-bg: #C0C9AF;
   --m: #85500A; --e: #34437C; --p: #2A5A2C; --d: #7E3150; --j: #195B66; color-scheme: light;
 }
 :root[data-skin="night"] {
-  --bg: #0F1724; --surface: #172234; --ink: #E6EAF2; --muted: #95A1B7; --line: #26334B; --done-bg: #121B2A;
+  --bg: #0F1724; --surface: #172234; --ink: #E6EAF2; --muted: #BCC6D8; --line: #26334B; --done-bg: #121B2A;
   --m: #E8B259; --e: #9EAAF5; --p: #5CC9A0; --d: #EC9BBB; --j: #6CCFDD; color-scheme: dark;
 }
 :root[data-mode="e"] { --accent: var(--e); }
@@ -54,7 +54,7 @@
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 body {
-  background: var(--bg); color: var(--ink); font-family: var(--f-ui); font-size: 15px; line-height: 1.5;
+  background: var(--bg); color: var(--ink); font-family: var(--f-ui); font-size: 16px; line-height: 1.55; text-rendering: optimizeLegibility; -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
 }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
@@ -94,7 +94,7 @@ h1 .logo { font-family: var(--f-ar); font-weight: 700; font-size: 1.6rem; color:
 .chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
 
 main .wrap { padding-block: 18px 48px; display: grid; gap: 14px; }
-.intro { color: var(--muted); font-size: 0.88rem; margin: 0 0 4px; max-width: 62ch; }
+.intro { color: var(--muted); font-size: 0.94rem; margin: 0 0 4px; max-width: 62ch; }
 
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 16px 14px; display: grid; gap: 12px; cursor: pointer; user-select: none; transition: background .2s, opacity .2s; min-width: 0; }
 .card:active { background: var(--accent-soft); }
@@ -104,21 +104,19 @@ main .wrap { padding-block: 18px 48px; display: grid; gap: 14px; }
 .itext { margin: 0; color: var(--ink); max-width: 65ch; }
 .card.info .chead h2 { text-transform: none; letter-spacing: 0; font-size: 1rem; color: var(--ink); }
 .group { margin: 10px 0 -2px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
-.card.done { background: var(--done-bg); opacity: .62; }
-.card.done .ar { color: var(--muted); }
+.card.done { background: var(--done-bg); }
 .chead { display: flex; align-items: center; gap: 10px; }
-.chead h2 { margin: 0; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); flex: 1; min-width: 0; }
+.chead h2 { margin: 0; font-size: 0.84rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); flex: 1; min-width: 0; }
 .times { font-size: 0.8rem; font-weight: 600; color: var(--accent); background: var(--accent-soft); padding: 2px 9px; border-radius: 999px; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .card.done .times { color: var(--muted); background: transparent; }
-.ar { font-family: var(--f-ar); font-size: var(--ar-size); line-height: 2.05; direction: rtl; text-align: right; margin: 0; overflow-wrap: anywhere; }
-.tl { margin: 0; font-size: 1.02rem; font-weight: 500; line-height: 1.55; color: color-mix(in srgb, var(--accent) 70%, var(--ink)); max-width: 65ch; }
-.card.done .tl { color: var(--muted); }
+.ar { font-family: var(--f-ar); font-size: calc(var(--ar-size) * 1.22); font-weight: 500; word-spacing: 0.08em; line-height: 2.1; direction: rtl; text-align: right; margin: 0; overflow-wrap: anywhere; }
+.tl { margin: 0; font-size: 1.06rem; font-weight: 600; line-height: 1.6; color: color-mix(in srgb, var(--accent) 35%, var(--ink)); max-width: 65ch; }
 .ru { margin: 0; color: var(--ink); max-width: 65ch; }
 body.no-tr .ru, body.no-tl .tl { display: none; }
-.fadl { margin: 0; font-size: 0.86rem; color: var(--muted); border-left: 2px solid var(--line); padding-left: 10px; max-width: 65ch; }
+.fadl { margin: 0; font-size: 0.92rem; color: var(--muted); border-left: 2px solid var(--line); padding-left: 10px; max-width: 65ch; }
 .cfoot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; }
 .ctr { margin-left: auto; }
-.src { font-size: 0.8rem; color: var(--muted); min-width: 0; }
+.src { font-size: 0.86rem; color: var(--muted); min-width: 0; }
 .ctr { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .play { font: inherit; font-size: 0.82rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; color: var(--accent); background: var(--accent-soft); border: 1px solid transparent; border-radius: 999px; padding: 6px 12px 6px 10px; cursor: pointer; white-space: nowrap; }
 .play svg { width: 14px; height: 14px; fill: currentColor; }
@@ -129,7 +127,7 @@ body.no-tr .ru, body.no-tl .tl { display: none; }
 .part h3 { margin: 0; font-size: 0.88rem; font-weight: 600; color: var(--accent); }
 .card.done .part h3 { color: var(--muted); }
 .arow { display: flex; padding-top: 2px; }
-.anote { margin: 0; font-size: 0.8rem; color: var(--muted); }
+.anote { margin: 0; font-size: 0.86rem; color: var(--muted); }
 /* Заучивание */
 .memo { display: grid; gap: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
 .memo-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; }
@@ -164,11 +162,11 @@ body.memo-hide .card .tl:not(.shown)::selection { background: transparent; }
 .ayahs { display: grid; gap: 0; border-top: 1px solid var(--line); }
 .ayah { display: grid; gap: 6px; padding: 12px 0; border-bottom: 1px solid var(--line); cursor: pointer; }
 .ayah.now { background: var(--accent-soft); margin-inline: -16px; padding-inline: 16px; }
-.ayah .ar { font-size: var(--ar-size); }
+.ayah .ar { font-size: calc(var(--ar-size) * 1.22); }
 .ayah .num { font-size: 0.75rem; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
-.kru { margin: 0; font-size: 0.92rem; color: var(--ink); max-width: 65ch; }
+.kru { margin: 0; font-size: 1rem; color: var(--ink); max-width: 65ch; }
 body.no-tr .kru { display: none; }
-.basmala { text-align: center; font-family: var(--f-ar); font-size: calc(var(--ar-size) * 1.05); margin: 4px 0 8px; }
+.basmala { text-align: center; font-family: var(--f-ar); font-size: calc(var(--ar-size) * 1.28); font-weight: 500; margin: 4px 0 8px; }
 .credits { margin: 8px 0 0; font-size: 0.78rem; color: var(--muted); text-align: center; }
 .reset { font: inherit; font-size: 0.78rem; color: var(--muted); background: none; border: 0; padding: 6px; cursor: pointer; border-radius: 6px; }
 .reset[hidden] { display: none; }
