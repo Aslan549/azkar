@@ -16,6 +16,7 @@
   --p: #1C7356;   /* после намаза */
   --d: #8A3B5C;   /* дуа */
   --j: #0F6A78;   /* пятница */
+  --alif: #B3261E; /* алиф, который читается */
   --accent: var(--m);
   --accent-soft: color-mix(in srgb, var(--accent) 12%, var(--surface));
   --done-bg: #D5DDD9;
@@ -26,12 +27,12 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #0E1412; --surface: #161E1B; --ink: #E5ECE8; --muted: #BAC7C1; --line: #26312D;
-    --m: #E3A54A; --e: #8C9BF0; --p: #4FC197; --d: #E58FB0; --j: #5CC4D4; --done-bg: #131A17; color-scheme: dark;
+    --m: #E3A54A; --e: #8C9BF0; --p: #4FC197; --d: #E58FB0; --j: #5CC4D4; --alif: #FF9C80; --done-bg: #131A17; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #0E1412; --surface: #161E1B; --ink: #E5ECE8; --muted: #BAC7C1; --line: #26312D;
-  --m: #E3A54A; --e: #8C9BF0; --p: #4FC197; --d: #E58FB0; --j: #5CC4D4; --done-bg: #131A17; color-scheme: dark;
+  --m: #E3A54A; --e: #8C9BF0; --p: #4FC197; --d: #E58FB0; --j: #5CC4D4; --alif: #FF9C80; --done-bg: #131A17; color-scheme: dark;
 }
 /* Выбранный цвет страниц: действует при любой системной теме. */
 :root[data-skin="sand"] {
@@ -44,7 +45,7 @@
 }
 :root[data-skin="night"] {
   --bg: #0F1724; --surface: #172234; --ink: #E6EAF2; --muted: #BCC6D8; --line: #26334B; --done-bg: #121B2A;
-  --m: #E8B259; --e: #9EAAF5; --p: #5CC9A0; --d: #EC9BBB; --j: #6CCFDD; color-scheme: dark;
+  --m: #E8B259; --e: #9EAAF5; --p: #5CC9A0; --d: #EC9BBB; --j: #6CCFDD; --alif: #FF9C80; color-scheme: dark;
 }
 :root[data-mode="e"] { --accent: var(--e); }
 :root[data-mode="p"] { --accent: var(--p); }
@@ -110,6 +111,8 @@ main .wrap { padding-block: 18px 48px; display: grid; gap: 14px; }
 .times { font-size: 0.8rem; font-weight: 600; color: var(--accent); background: var(--accent-soft); padding: 2px 9px; border-radius: 999px; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .card.done .times { color: var(--muted); background: transparent; }
 .ar { font-family: var(--f-ar); font-size: calc(var(--ar-size) * 1.12); font-weight: 600; word-spacing: 0.1em; line-height: 2.3; direction: rtl; text-align: right; margin: 0; overflow-wrap: anywhere; }
+.al { color: var(--alif); }
+body.no-alif .al { color: inherit; }
 .tl { margin: 0; font-size: 1.06rem; font-weight: 600; line-height: 1.6; color: color-mix(in srgb, var(--accent) 35%, var(--ink)); max-width: 65ch; }
 .ru { margin: 0; color: var(--ink); max-width: 65ch; }
 body.no-tr .ru, body.no-tl .tl { display: none; }
@@ -198,6 +201,7 @@ body.no-tr .kru { display: none; }
         <button class="tool" id="fs-inc" aria-label="Увеличить арабский шрифт">A+</button>
         <button class="tool" id="tlb" aria-pressed="true">Транскрипция</button>
         <button class="tool" id="tr" aria-pressed="true">Перевод</button>
+        <button class="tool" id="alif-btn" aria-pressed="true">Алиф</button>
         <button class="tool" id="memo-btn" aria-pressed="false" aria-controls="memo">Заучивание</button>
       </div>
     </div>
@@ -750,6 +754,7 @@ let showTr = store.get("azkar:tr", true);
 let showTl = store.get("azkar:tl", true);
 let skin = store.get("azkar:skin", "default");
 let cat = store.get("azkar:cat", "q");
+let showAlif = store.get("azkar:alif", true);
 let rep = store.get("azkar:rep", 1);
 let rate = store.get("azkar:rate", 1);
 let hideChk = store.get("azkar:hide", false);
@@ -781,6 +786,56 @@ const $ = s => document.querySelector(s);
 const list = $("#list");
 const R = 22, C = 2 * Math.PI * R;
 const esc = s => s.replace(/[&<>"]/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
+// Выделение алифа, который произносится. Текст делится на буквы с их огласовками:
+// читается алиф с хамзой, алиф долготы после фатхи, алиф-максура, алиф в начале речи и алиф танвина при остановке;
+// не читается соединительный алиф внутри речи и алиф после вава множественного числа.
+const MARK = /[ؐ-ًؚ-ٰٟۖ-ۜ۟-۪ۤۧۨ-ۭ]/;
+const PAUSE = /[،؛.:!؟۝ۖ-ۜ]/;
+const NON_JOINING = "اأإآٱدذرزوؤءة";
+const PREFIX = "وفبكل";
+const has = (c, chars) => [...chars].some(m => c.m.includes(m));
+function alif(text) {
+  const cs = [];
+  for (const ch of text) {
+    if (MARK.test(ch) && cs.length && cs[cs.length - 1].letter) cs[cs.length - 1].m += ch;
+    else cs.push({ b: ch, m: "", letter: /[ؠ-يـٱ-ۓ]/.test(ch) });
+  }
+  const nextIsPause = i => { for (let j = i + 1; j < cs.length; j++) { if (cs[j].letter) return false; if (PAUSE.test(cs[j].b)) return true; } return true; };
+  const isPauseMark = c => has(c, "ۖۗۘۙۚۛۜ");
+  let pause = true;
+  const read = cs.map((c, i) => {
+    if (!c.letter) { if (PAUSE.test(c.b)) pause = true; return false; }
+    const prev = i && cs[i - 1].letter ? cs[i - 1] : null, next = cs[i + 1] && cs[i + 1].letter ? cs[i + 1] : null;
+    const startOfSpeech = !prev && pause;
+    pause = isPauseMark(c);
+    if ("أإآ".includes(c.b)) return true;
+    if (c.b === "ٱ") return startOfSpeech;
+    if (c.b !== "ا" && c.b !== "ى") return false;
+    if (has(c, "۟۠")) return false;
+    if (c.b === "ى" && has(c, "َُِّ")) return false;
+    if (!prev) return c.b === "ا" && startOfSpeech;
+    if (has(prev, "ً")) return nextIsPause(i);
+    if (!has(prev, "َ")) return false;
+    const prefix = PREFIX.includes(prev.b) && !(i >= 2 && cs[i - 2].letter);
+    if (c.b === "ا" && prefix && next && (!has(next, "َُِ") || has(next, "ّْۡ"))) return false;
+    return true;
+  });
+  let out = "";
+  for (let i = 0; i < cs.length; i++) {
+    const c = cs[i];
+    if (!read[i + 1] && !read[i]) { out += c.b + c.m; continue; }
+    // «лям-алиф» — единая лигатура, выделяем её целиком
+    const lig = read[i + 1] && c.b === "ل" && !"ى".includes(cs[i + 1].b) && c.letter;
+    if (!read[i] && !lig) { out += c.b + c.m; continue; }
+    const start = i, end = lig ? i + 1 : i, before = start && cs[start - 1].letter && !NON_JOINING.includes(cs[start - 1].b);
+    out += (before ? "‍" : "") + '<span class="al">' + (before ? "‍" : "");
+    for (let k = start; k <= end; k++) out += cs[k].b + cs[k].m;
+    out += "</span>";
+    i = end;
+  }
+  return out;
+}
+
 const timesLabel = n => n === 1 ? "1 раз" : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) ? n + " раза" : n + " раз";
 
 const INTRO = {
@@ -809,7 +864,7 @@ function render() {
   const its = items();
   let group = null;
   const sub = mode === "d" ? cat : mode;
-  const intro = INTRO[sub] + (sub === "w" || sub === "j" ? "" : " В транскрипции знак ' обозначает букву «айн» или хамзу (короткую паузу).");
+  const intro = INTRO[sub] + (sub === "w" || sub === "j" ? "" : " В транскрипции знак ' обозначает букву «айн» или хамзу (короткую паузу).") + (sub === "w" ? "" : " Цветом выделен алиф, который читается.");
   const banner = isFridayTime && mode !== "j"
     ? `<div class="banner"><span>${dow === 5 ? "Сегодня пятница" : "Наступила ночь пятницы"}: прочитайте суру «Аль-Кахф» и больше салавата.</span><button id="go-friday">Открыть</button></div>` : "";
   const empty = sub === "f" && !its.length ? `<div class="empty">Пока пусто. Нажмите ☆ на карточке дуа, и она появится здесь.</div>` : "";
@@ -833,7 +888,7 @@ function render() {
     const tally = x.tally ? (() => { const t = store.get("azkar:sal:" + today(), 0); return `<button class="tally" id="tally-${x.id}">+1 салават · сегодня ${t}</button>`; })() : "";
     if (!x.n) return head + `<article class="card static" data-id="${x.id}" data-n="0" aria-label="${esc(x.t)}">
       <div class="chead"><h2>${esc(x.t)}</h2>${x.times ? `<span class="times">${x.times}</span>` : ""}${fav}</div>
-      <p class="ar" lang="ar">${x.ar}</p>
+      <p class="ar" lang="ar">${alif(x.ar)}</p>
       <p class="tl">${esc(x.tl)}</p>
       <p class="ru">${esc(x.ru)}</p>
       ${x.fadl ? `<p class="fadl">${esc(x.fadl)}</p>` : ""}
@@ -849,11 +904,11 @@ function render() {
       <div class="chead"><h2>${esc(x.t)}</h2><span class="times">${x.times || timesLabel(x.n)}</span></div>
       ${x.parts ? QULS.map(p => `<div class="part">
         <h3>${esc(p.h)}</h3>
-        <p class="ar" lang="ar">${p.ar}</p>
+        <p class="ar" lang="ar">${alif(p.ar)}</p>
         <p class="tl">${esc(p.tl)}</p>
         <p class="ru">${esc(p.ru)}</p>
       </div>`).join("") + `<div class="arow">${playBtn(x, "Слушать все три суры")}</div>` : `
-      <p class="ar" lang="ar">${x.ar}</p>
+      <p class="ar" lang="ar">${alif(x.ar)}</p>
       ${x.tl ? `<p class="tl">${esc(x.tl)}</p>` : ""}
       <p class="ru">${esc(x.ru)}</p>`}
       ${x.fadl ? `<p class="fadl">${esc(x.fadl)}</p>` : ""}
@@ -885,7 +940,7 @@ function kahfHtml() {
   return `<p class="basmala" lang="ar">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p><div class="ayahs">` +
     kahf.map((a, i) => `<div class="ayah" id="ayah-${i + 1}" data-ayah="${i + 1}">
       <span class="num">${i + 1}</span>
-      <p class="ar" lang="ar">${a.a}</p>
+      <p class="ar" lang="ar">${alif(a.a)}</p>
       <p class="kru">${esc(a.r)}</p>
     </div>`).join("") + `</div>`;
 }
@@ -1073,6 +1128,8 @@ function applyPrefs() {
   if (skin === "default") delete document.documentElement.dataset.skin;
   else document.documentElement.dataset.skin = skin;
   document.querySelectorAll(".sw").forEach(b => b.setAttribute("aria-pressed", b.dataset.skin === skin));
+  document.body.classList.toggle("no-alif", !showAlif);
+  $("#alif-btn").setAttribute("aria-pressed", showAlif);
   document.body.classList.toggle("memo-hide", hideChk);
   $("#hide-chk").setAttribute("aria-pressed", hideChk);
   $("#memo").hidden = !memoOpen;
@@ -1080,6 +1137,7 @@ function applyPrefs() {
   document.querySelectorAll("#memo-rep .chip").forEach(b => b.setAttribute("aria-pressed", +b.dataset.rep === rep));
   document.querySelectorAll("#memo-rate .chip").forEach(b => b.setAttribute("aria-pressed", +b.dataset.rate === rate));
 }
+$("#alif-btn").onclick = () => { showAlif = !showAlif; store.set("azkar:alif", showAlif); applyPrefs(); };
 $("#memo-btn").onclick = () => { memoOpen = !memoOpen; applyPrefs(); };
 $("#memo-rep").addEventListener("click", e => {
   const b = e.target.closest(".chip"); if (!b) return;
