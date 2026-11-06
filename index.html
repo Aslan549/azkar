@@ -17,7 +17,7 @@ img { max-width: 100%; }
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@500;600;700&family=Scheherazade+New:wght@500&family=Golos+Text:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Noto+Naskh+Arabic:wght@600&family=Golos+Text:wght@400;500;600;700&display=swap">
 <style>
 /* Layout: one narrow reading column; sticky header with section switch + progress; each dhikr is a tappable card with its own counter ring. */
 :root {
@@ -35,7 +35,7 @@ img { max-width: 100%; }
   --accent: var(--m);
   --accent-soft: color-mix(in srgb, var(--accent) 12%, var(--surface));
   --done-bg: #D5DDD9;
-  --f-ar: "Noto Naskh Arabic", "Scheherazade New", "Traditional Arabic", serif;
+  --f-ar: "Amiri", "Noto Naskh Arabic", "Traditional Arabic", serif;
   --f-ui: "Golos Text", "Segoe UI", system-ui, -apple-system, sans-serif;
   --ar-size: 1.75rem;
 }
@@ -125,7 +125,7 @@ main .wrap { padding-block: 18px 48px; display: grid; gap: 14px; }
 .chead h2 { margin: 0; font-size: 0.84rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); flex: 1; min-width: 0; }
 .times { font-size: 0.8rem; font-weight: 600; color: var(--accent); background: var(--accent-soft); padding: 2px 9px; border-radius: 999px; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .card.done .times { color: var(--muted); background: transparent; }
-.ar { font-family: var(--f-ar); font-size: calc(var(--ar-size) * 1.12); font-weight: 600; word-spacing: 0.1em; line-height: 2.3; direction: rtl; text-align: right; margin: 0; overflow-wrap: anywhere; }
+.ar { font-family: var(--f-ar); font-size: calc(var(--ar-size) * 1.15); font-weight: 700; word-spacing: 0.1em; line-height: 2.3; direction: rtl; text-align: right; margin: 0; overflow-wrap: anywhere; }
 .al { color: var(--alif); }
 body.no-alif .al { color: inherit; }
 .tl { margin: 0; font-size: 1.06rem; font-weight: 600; line-height: 1.6; color: color-mix(in srgb, var(--accent) 35%, var(--ink)); max-width: 65ch; }
@@ -180,11 +180,11 @@ body.memo-hide .card .tl:not(.shown)::selection { background: transparent; }
 .ayahs { display: grid; gap: 0; border-top: 1px solid var(--line); }
 .ayah { display: grid; gap: 6px; padding: 12px 0; border-bottom: 1px solid var(--line); cursor: pointer; }
 .ayah.now { background: var(--accent-soft); margin-inline: -16px; padding-inline: 16px; }
-.ayah .ar { font-size: calc(var(--ar-size) * 1.12); }
+.ayah .ar { font-size: calc(var(--ar-size) * 1.15); }
 .ayah .num { font-size: 0.75rem; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
 .kru { margin: 0; font-size: 1rem; color: var(--ink); max-width: 65ch; }
 body.no-tr .kru { display: none; }
-.basmala { text-align: center; font-family: var(--f-ar); font-size: calc(var(--ar-size) * 1.16); font-weight: 600; margin: 4px 0 8px; }
+.basmala { text-align: center; font-family: var(--f-ar); font-size: calc(var(--ar-size) * 1.2); font-weight: 700; margin: 4px 0 8px; }
 .credits { margin: 8px 0 0; font-size: 0.78rem; color: var(--muted); text-align: center; }
 .reset { font: inherit; font-size: 0.78rem; color: var(--muted); background: none; border: 0; padding: 6px; cursor: pointer; border-radius: 6px; }
 .reset[hidden] { display: none; }
