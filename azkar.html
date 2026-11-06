@@ -2,7 +2,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Noto+Naskh+Arabic:wght@600&family=Golos+Text:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Noto+Naskh+Arabic:wght@600&family=Golos+Text:wght@400;500;600;700&display=swap">
 <style>
 /* Layout: one narrow reading column; sticky header with section switch + progress; each dhikr is a tappable card with its own counter ring. */
 :root {
@@ -16,23 +16,23 @@
   --p: #1C7356;   /* после намаза */
   --d: #8A3B5C;   /* дуа */
   --j: #0F6A78;   /* пятница */
-  --alif: #B3261E; /* алиф, который читается */
+  --alif: #8E1B14; /* алиф, который читается */
   --accent: var(--m);
   --accent-soft: color-mix(in srgb, var(--accent) 12%, var(--surface));
   --done-bg: #D5DDD9;
-  --f-ar: "Amiri", "Noto Naskh Arabic", "Traditional Arabic", serif;
+  --f-ar: "Amiri Quran", "Noto Naskh Arabic", "Traditional Arabic", serif;
   --f-ui: "Golos Text", "Segoe UI", system-ui, -apple-system, sans-serif;
   --ar-size: 1.75rem;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #0E1412; --surface: #161E1B; --ink: #E5ECE8; --muted: #BAC7C1; --line: #26312D;
-    --m: #E3A54A; --e: #8C9BF0; --p: #4FC197; --d: #E58FB0; --j: #5CC4D4; --alif: #FF9C80; --done-bg: #131A17; color-scheme: dark;
+    --m: #E3A54A; --e: #8C9BF0; --p: #4FC197; --d: #E58FB0; --j: #5CC4D4; --alif: #F28468; --done-bg: #131A17; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #0E1412; --surface: #161E1B; --ink: #E5ECE8; --muted: #BAC7C1; --line: #26312D;
-  --m: #E3A54A; --e: #8C9BF0; --p: #4FC197; --d: #E58FB0; --j: #5CC4D4; --alif: #FF9C80; --done-bg: #131A17; color-scheme: dark;
+  --m: #E3A54A; --e: #8C9BF0; --p: #4FC197; --d: #E58FB0; --j: #5CC4D4; --alif: #F28468; --done-bg: #131A17; color-scheme: dark;
 }
 /* Выбранный цвет страниц: действует при любой системной теме. */
 :root[data-skin="sand"] {
@@ -45,7 +45,7 @@
 }
 :root[data-skin="night"] {
   --bg: #0F1724; --surface: #172234; --ink: #E6EAF2; --muted: #BCC6D8; --line: #26334B; --done-bg: #121B2A;
-  --m: #E8B259; --e: #9EAAF5; --p: #5CC9A0; --d: #EC9BBB; --j: #6CCFDD; --alif: #FF9C80; color-scheme: dark;
+  --m: #E8B259; --e: #9EAAF5; --p: #5CC9A0; --d: #EC9BBB; --j: #6CCFDD; --alif: #F28468; color-scheme: dark;
 }
 :root[data-mode="e"] { --accent: var(--e); }
 :root[data-mode="p"] { --accent: var(--p); }
@@ -75,7 +75,7 @@ header .wrap { padding-block: 10px; display: grid; gap: 10px; }
 .sw[data-skin="olive"] { background: #C9D2BA; }
 .sw[data-skin="night"] { background: #0F1724; }
 h1 { margin: 0; font-size: 1.35rem; font-weight: 700; letter-spacing: -0.01em; display: flex; align-items: baseline; gap: 10px; }
-h1 .logo { font-family: var(--f-ar); font-weight: 700; font-size: 1.6rem; color: var(--accent); }
+h1 .logo { font-family: var(--f-ar); font-weight: 400; font-size: 1.55rem; color: var(--accent); }
 .intro-top { padding-block: 16px 12px; display: grid; gap: 12px; }
 .tools { display: flex; gap: 6px; }
 .tool { font: inherit; font-size: 0.85rem; font-weight: 600; color: var(--muted); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 5px 10px; cursor: pointer; }
@@ -110,7 +110,7 @@ main .wrap { padding-block: 18px 48px; display: grid; gap: 14px; }
 .chead h2 { margin: 0; font-size: 0.84rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); flex: 1; min-width: 0; }
 .times { font-size: 0.8rem; font-weight: 600; color: var(--accent); background: var(--accent-soft); padding: 2px 9px; border-radius: 999px; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .card.done .times { color: var(--muted); background: transparent; }
-.ar { font-family: var(--f-ar); font-size: calc(var(--ar-size) * 1.15); font-weight: 700; word-spacing: 0.1em; line-height: 2.3; direction: rtl; text-align: right; margin: 0; overflow-wrap: anywhere; }
+.ar { font-family: var(--f-ar); font-size: calc(var(--ar-size) * 1.09); font-weight: 400; word-spacing: 0.1em; line-height: 2.3; direction: rtl; text-align: right; margin: 0; overflow-wrap: anywhere; }
 .al { color: var(--alif); }
 body.no-alif .al { color: inherit; }
 .tl { margin: 0; font-size: 1.06rem; font-weight: 600; line-height: 1.6; color: color-mix(in srgb, var(--accent) 35%, var(--ink)); max-width: 65ch; }
@@ -165,11 +165,11 @@ body.memo-hide .card .tl:not(.shown)::selection { background: transparent; }
 .ayahs { display: grid; gap: 0; border-top: 1px solid var(--line); }
 .ayah { display: grid; gap: 6px; padding: 12px 0; border-bottom: 1px solid var(--line); cursor: pointer; }
 .ayah.now { background: var(--accent-soft); margin-inline: -16px; padding-inline: 16px; }
-.ayah .ar { font-size: calc(var(--ar-size) * 1.15); }
+.ayah .ar { font-size: calc(var(--ar-size) * 1.09); }
 .ayah .num { font-size: 0.75rem; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
 .kru { margin: 0; font-size: 1rem; color: var(--ink); max-width: 65ch; }
 body.no-tr .kru { display: none; }
-.basmala { text-align: center; font-family: var(--f-ar); font-size: calc(var(--ar-size) * 1.2); font-weight: 700; margin: 4px 0 8px; }
+.basmala { text-align: center; font-family: var(--f-ar); font-size: calc(var(--ar-size) * 1.14); font-weight: 400; margin: 4px 0 8px; }
 .credits { margin: 8px 0 0; font-size: 0.78rem; color: var(--muted); text-align: center; }
 .reset { font: inherit; font-size: 0.78rem; color: var(--muted); background: none; border: 0; padding: 6px; cursor: pointer; border-radius: 6px; }
 .reset[hidden] { display: none; }
@@ -182,13 +182,13 @@ body.no-tr .kru { display: none; }
 .card.done .ring b { color: var(--accent); font-size: 1.2rem; }
 
 .finish { text-align: center; padding: 28px 16px; border: 1px dashed var(--accent); border-radius: 14px; background: var(--accent-soft); }
-.finish .ar { text-align: center; font-size: 1.9rem; color: var(--accent); }
+.finish .ar { text-align: center; font-size: 1.8rem; color: var(--accent); }
 .finish p { margin: 4px 0 0; color: var(--muted); }
 .clear { margin-top: 14px; }
 
 @media (max-width: 420px) {
   h1 { font-size: 1.15rem; }
-  .ar { line-height: 1.95; }
+  .ar { line-height: 2.1; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
